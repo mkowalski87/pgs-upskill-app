@@ -7,7 +7,7 @@ db.init_app(app)
 
 @app.route('/api/user', methods=["GET"])
 def getUsers():
-    return jsonify([u.serialize for u in User.query.all()])
+    return jsonify([u.serialized for u in User.query.all()])
 
 @app.route('/api/user', methods=["POST"])
 def addUser():
@@ -25,4 +25,8 @@ def getUser(user_id):
     usr = User.query.filter(User.id == user_id).first()
     if usr == None:
         return abort(404)
-    return usr.serialize
+    return usr.serialized
+
+
+if __name__ == "__main__":
+    app.run()
