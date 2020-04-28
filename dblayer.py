@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import escape
+from Exceptions import ValidationError
 
 db = SQLAlchemy()
 
@@ -31,13 +32,10 @@ class User(db.Model):
 
     @staticmethod
     def validate(json):
-        if json is None:
-            return 'missing json object'
         if 'first_name' not in json:
-            return 'missing first_name'
+            raise ValidationError('first_name')
         if 'last_name' not in json:
-            return 'missing last_name'
-        return None
+            raise ValidationError('last_name')
 
     @property
     def serialized(self):

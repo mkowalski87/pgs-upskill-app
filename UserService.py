@@ -1,4 +1,5 @@
 from dblayer import User, Skill, UserSkill
+from Exceptions import *
 
 class UserService:
 
@@ -53,7 +54,10 @@ class UserService:
         return User.query.all()
 
     def get_by_id(self, id) -> User:
-        return User.query.filter(User.id == id).first()
+        user = User.query.filter(User.id == id).first()
+        if user is None:
+            raise NotFoundObjectError("User")
+        return user
 
     def get_skill_by_name_or_create(self, name) -> Skill:
         skill = Skill.query.filter(Skill.name == name).first()
