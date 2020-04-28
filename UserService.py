@@ -1,5 +1,7 @@
 from dblayer import User, Skill, UserSkill
 from Exceptions import *
+import boto3
+import uuid
 
 class UserService:
 
@@ -66,4 +68,14 @@ class UserService:
             self.db.session.add(skill)
             self.db.session.commit()
         return skill
+
+    def upload_cv(self, user_id, data):
+        filename = "".join(['cv/', str(uuid.uuid4()), ".pdf"])
+        s3 = boto3.resource('s3')
+        s3.Bucket('mkowalski-upskill').put_object(Key=filename,Body=data)
+        user = self.get_by_id(user_id)
+        user.cv_url = filename
+        self.db.session.merge(user)
+        self.db.session.commit()
+
 
