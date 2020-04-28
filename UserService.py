@@ -43,7 +43,11 @@ class UserService:
                 user_skill.level = skill_level
         self.db.session.merge(user)
         self.db.session.commit()
-        pass
+
+    def delete_user(self, id):
+        user = self.get_by_id(id)
+        self.db.session.delete(user)
+        self.db.session.commit()
 
     def all_users(self):
         return User.query.all()

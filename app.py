@@ -28,6 +28,15 @@ def showSkills(user_id: int):
     except Exception as e:
         return make_response({'error':e.args[0]}, 400)
 
+@app.route('/api/user/<user_id>', methods=["DELETE"])
+def deleteUser(user_id: int):
+    try:
+        userService = UserService(db)
+        userService.delete_user(user_id)
+        return make_response('',204)
+    except Exception as e:
+        return make_response({'error':e.args[0]}, 400)
+
 @app.route('/api/user/<user_id>/skill', methods=["POST"])
 def addSkills(user_id: int):
     jsonSkills = request.json

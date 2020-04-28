@@ -22,7 +22,7 @@ class User(db.Model):
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     cv_url = db.Column(db.String, unique=True)
-    skills = db.relationship('UserSkill')
+    skills = db.relationship('UserSkill', cascade="save-update, merge, delete")
 
     def __init__(self, json):
         self.first_name = escape(json['first_name'])
