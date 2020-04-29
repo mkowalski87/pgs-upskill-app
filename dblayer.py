@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import escape
 from Exceptions import ValidationError
+from FileStorageManager import FileStorageManager
 
 db = SQLAlchemy()
 
@@ -39,12 +40,19 @@ class User(db.Model):
 
     @property
     def serialized(self):
-       return {'id': self.id, 'first_name': self.first_name, 'last_name': self.last_name, 'cv_url': self.cv_url, 'skills': [s.serialized for s in self.skills]}
+       return {'id': self.id, 'first_name': self.first_name, 'last_name': self.last_name, 'cv_url': self.get_cv_url, 'skills': [s.serialized for s in self.skills]}
 
     def get_user_skill_by_name(self, name):
         for s in self.skills:
             if s.skill.name == name:
                 return s
+
+    @property
+    def get_cv_url(self):
+        if not self.cv_url:
+            return None
+        return FileStorageManager().get_preassigned_url(self.cv_url)
+
 
 
 class Skill(db.Model):

@@ -1,12 +1,13 @@
 from dblayer import User, Skill, UserSkill
 from Exceptions import *
-import boto3
+from FileStorageManager import FileStorageManager
 import uuid
 
 class UserService:
 
     def __init__(self, db):
         self.db = db
+        self.storage_manager = FileStorageManager()
 
     def create_or_update(self, json):
         if 'id' in json:
@@ -71,8 +72,7 @@ class UserService:
 
     def upload_cv(self, user_id, data):
         filename = "".join(['cv/', str(uuid.uuid4()), ".pdf"])
-        s3 = boto3.resource('s3')
-        s3.Bucket('mkowalski-upskill').put_object(Key=filename,Body=data)
+        self.storage_manager.upload_file(filename, data)
         user = self.get_by_id(user_id)
         user.cv_url = filename
         self.db.session.merge(user)
