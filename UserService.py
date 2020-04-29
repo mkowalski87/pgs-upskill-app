@@ -71,6 +71,7 @@ class UserService:
         return skill
 
     def upload_cv(self, user_id, data):
+        # assuming only pdf support
         filename = "".join(['cv/', str(uuid.uuid4()), ".pdf"])
         self.storage_manager.upload_file(filename, data)
         user = self.get_by_id(user_id)

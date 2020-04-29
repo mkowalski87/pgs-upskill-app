@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, abort, request, make_response
 from dblayer import db, User
 from UserService import UserService
+from FileStorageManager import FileStorageManager
 from Exceptions import *
 
 app = Flask(__name__)
@@ -61,9 +62,10 @@ def get_user(user_id):
 @app.route('/api/user/<int:user>/cv', methods=['POST'])
 def upload_file(user):
     try:
+        FileStorageManager.validate_content_type(request.content_type)
         UserService(db).upload_cv(user, request.data)
         return make_response('',200)
-    except NotFoundObjectError as e:
+    except (NotSupportedContentType,NotFoundObjectError) as e:
         return make_response({'error': F"{e!r}"}, 400)
 
 if __name__ == "__main__":

@@ -14,3 +14,11 @@ class ValidationError(Exception):
 
     def __repr__(self):
         return F"{self.name} is not valid"
+
+class NotSupportedContentType(Exception):
+    def __init__(self, type):
+        self.type = type
+        pass
+
+    def __repr__(self):
+        return F"{self.type} contentType is not supported"
