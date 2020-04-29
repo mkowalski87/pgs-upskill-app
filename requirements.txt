@@ -2,3 +2,4 @@ Flask
 Flask-SQLAlchemy
 boto3
 botocore
+pytest
