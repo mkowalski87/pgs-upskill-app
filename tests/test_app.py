@@ -35,3 +35,12 @@ def test_ad_and_get_user(client):
     assert response.status_code == 201
     response = client.get('api/user/1')
     assert response.status_code == 200
+
+def test_add_skills(client):
+    response = client.post('api/user', json={'first_name':'n1', 'last_name':'ln1'})
+    assert response.status_code == 201
+    response = client.get('api/user/1')
+    assert {'cv_url': None, 'first_name': 'n1', 'last_name': 'ln1', 'id':1, 'skills': []} ==  response.get_json()
+    client.post('api/user/1/skill', json=[{'name':'c++', 'level':3}])
+    response = client.get('api/user/1/skill')
+    assert [{'name':'c++', 'level':3}] == response.get_json()
